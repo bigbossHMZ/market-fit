@@ -40,6 +40,24 @@ uvicorn main:app --reload
 
 ---
 
+## Testing
+
+```bash
+source venv/bin/activate
+cd apps/backend
+
+# Run all tests
+python -m pytest -v
+
+# Run unit tests only
+python -m pytest tests/unit/ -v
+
+# Run integration tests only (requires Localstack)
+python -m pytest tests/integration/ -v
+```
+
+---
+
 ## API Endpoints
 
 | Method | Endpoint          | Description                                      |
