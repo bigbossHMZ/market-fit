@@ -1,8 +1,25 @@
-from fastapi import FastAPI
+import os
+from dataclasses import dataclass
+from dotenv import load_dotenv
 
-app = FastAPI()
+@dataclass
+class Config:
+    database_url: str
+    secret_key: str
+    debug: bool
 
 
-@app.get("/health")
-def healthcheck() -> dict[str, str]:
-    return {"status": "ok"}
+def import_config():
+    load_dotenv()
+
+    config_module = os.getenv("CONFIG_MODULE", "config")
+    try:
+        config = __import__(config_module)
+        return config
+    except ImportError as e:
+        print(f"Error importing config module '{config_module}': {e}")
+        raise
+
+
+if __name__ == "__main__":
+    os.getenv
