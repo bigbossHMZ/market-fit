@@ -32,8 +32,8 @@ Selling on multiple Amazon marketplaces is complex. Prices vary, competition dif
 ## Getting Started
 
 ```bash
-git clone https://github.com/yourusername/marketfit
-cd marketfit
+git clone https://github.com/bigbossHMZ/market-fit
+cd market-fit
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
