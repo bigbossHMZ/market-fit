@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from requests_aws4auth import AWS4Auth
 import boto3
 from apps.backend.clients.spapi.config import LWAConfig, StsConfig
+from apps.backend.clients.spapi.errors import SPAPIAuthError
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,7 @@ class StsAuth():
                 self._aws_auth = None
             except Exception as e:
                 logger.error(f"Error assuming role: {e}")
-                raise
+                raise SPAPIAuthError(f"STS role assumption failed: {e}") from e
         return self.credentials
 
     def get_aws_auth(self) -> AWS4Auth:
@@ -80,7 +81,7 @@ class LWAAuth:
                 self.expires_at = datetime.now(timezone.utc) + timedelta(seconds=expires_in)
             except requests.RequestException as e:
                 logger.error(f"Error obtaining LWA token: {e}")
-                raise
+                raise SPAPIAuthError(f"LWA token fetch failed: {e}") from e
         return self.token
 
     def get_grantless_token(self, scope: str) -> str:
@@ -107,7 +108,7 @@ class LWAAuth:
             return token
         except requests.RequestException as e:
             logger.error(f"Error obtaining grantless LWA token: {e}")
-            raise
+            raise SPAPIAuthError(f"Grantless LWA token fetch failed: {e}") from e
 
 
 class SPAPIAuth:
