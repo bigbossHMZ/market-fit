@@ -1,8 +1,8 @@
 import logging
-from typing import Any
+from typing import Any, Protocol
 from requests import Timeout, ConnectionError, HTTPError
+from requests_aws4auth import AWS4Auth
 from apps.backend.clients.http import HttpClient
-from apps.backend.clients.spapi.auth import SPAPIAuth
 from apps.backend.clients.spapi.errors import (
     SPAPIThrottleError,
     SPAPIClientError,
@@ -13,8 +13,14 @@ from apps.backend.clients.spapi.errors import (
 logger = logging.getLogger(__name__)
 
 
+class SPAPIAuthProtocol(Protocol):
+    def get_aws_auth(self) -> AWS4Auth: ...
+    def get_headers(self) -> dict: ...
+    def get_grantless_headers(self, scope: str) -> dict: ...
+
+
 class SPAPIClient:
-    def __init__(self, auth: SPAPIAuth, http: HttpClient):
+    def __init__(self, auth: SPAPIAuthProtocol, http: HttpClient):
         self.auth = auth
         self.http = http
 
