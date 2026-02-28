@@ -29,6 +29,39 @@ Selling on multiple Amazon marketplaces is complex. Prices vary, competition dif
 
 ---
 
+## Architecture
+
+```mermaid
+graph TD
+    ENV[.env] -->|load_spapi_config| CFG[SPAPIConfig]
+    CFG -->|build_spapi_client| FACTORY[Factory]
+
+    subgraph Auth Layer
+        FACTORY --> STS[StsAuth\nAWS Signature V4]
+        FACTORY --> LWA[LWAAuth\nLWA Access Token]
+        STS --> SPAUTH[SPAPIAuth]
+        LWA --> SPAUTH
+    end
+
+    subgraph Transport Layer
+        FACTORY --> HC[HttpClient\nretry · backoff · timeout]
+    end
+
+    SPAUTH --> SPC[SPAPIClient]
+    HC --> SPC
+
+    SPC --> CAT[CatalogClient]
+    SPC --> PRC[PricingClient]
+
+    STS -.->|assume_role| AWS[(AWS STS)]
+    LWA -.->|token refresh| AMZLWA[(Amazon LWA)]
+    HC -.->|signed requests| SPAPI[(SP-API)]
+```
+
+> Solid arrows represent internal dependency injection. Dotted arrows represent external network calls.
+
+---
+
 ## Getting Started
 
 ```bash
