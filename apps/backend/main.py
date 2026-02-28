@@ -1,25 +1,36 @@
 import os
-from dataclasses import dataclass
+import logging
 from dotenv import load_dotenv
+from backend.clients.spapi.config import load_spapi_config
 
-@dataclass
-class Config:
-    database_url: str
-    secret_key: str
-    debug: bool
+def configure_logging() -> logging.Logger:
+    level_name = os.getenv("LOG_LEVEL", "INFO").upper()
+    level = getattr(logging, level_name, logging.INFO)
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+    )
+    # for noisy_lib in ("boto3","botocore", "urllib3"):
+    #     logging.getLogger(noisy_lib).setLevel(logging.WARNING)
 
+    return logging.getLogger(__name__)
 
-def import_config():
+def main():
     load_dotenv()
 
-    config_module = os.getenv("CONFIG_MODULE", "config")
+    logger = configure_logging()
+
     try:
-        config = __import__(config_module)
-        return config
-    except ImportError as e:
-        print(f"Error importing config module '{config_module}': {e}")
-        raise
+        sp_api_config = load_spapi_config()
+        logger.debug(f"SPAPI config loaded: {sp_api_config}")
+    except ValueError as e:
+        logger.error(f"Error loading SPAPI config: {e}")
+        logger.info("Aborting... Please set the required environment variables and try again.")
+        return
+
+
+
 
 
 if __name__ == "__main__":
-    os.getenv
+    main()
