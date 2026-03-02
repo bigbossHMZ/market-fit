@@ -3,8 +3,8 @@ from typing import Any, Protocol
 
 import httpx
 
-from apps.backend.clients.http import HttpClient
-from apps.backend.clients.spapi.errors import (
+from backend.clients.http import HttpClient
+from backend.clients.spapi.errors import (
     SPAPIClientError,
     SPAPINetworkError,
     SPAPIServerError,

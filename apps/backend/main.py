@@ -1,6 +1,9 @@
 import os
 import logging
+import asyncio
 from dotenv import load_dotenv
+from backend.clients.spapi.factory import build_spapi_client
+from backend.clients.spapi.catalog_client import CatalogClient
 from backend.clients.spapi.config import load_spapi_config
 
 def configure_logging() -> logging.Logger:
@@ -15,7 +18,7 @@ def configure_logging() -> logging.Logger:
 
     return logging.getLogger(__name__)
 
-def main():
+async def main():
     load_dotenv()
 
     logger = configure_logging()
@@ -28,9 +31,15 @@ def main():
         logger.info("Aborting... Please set the required environment variables and try again.")
         return
 
+    sp_api_client = build_spapi_client(sp_api_config)
+    logger.info("SPAPI client successfully created.")
 
+    catalog_client = CatalogClient(sp_api_client)
+    marketplace_id = os.getenv("MARKETPLACE_ID", "")
+    items = await catalog_client.get_catalog_item(asin="0274900653", marketplace_id=[marketplace_id])
+    logger.info(f"Catalog item data: {items}")
 
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -8,8 +8,8 @@ from botocore.auth import SigV4Auth
 from botocore.awsrequest import AWSRequest
 from botocore.credentials import Credentials
 
-from apps.backend.clients.spapi.config import LWAConfig, StsConfig
-from apps.backend.clients.spapi.errors import SPAPIAuthError
+from backend.clients.spapi.config import LWAConfig, StsConfig
+from backend.clients.spapi.errors import SPAPIAuthError
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
-from apps.backend.clients.http import HttpClient
-from apps.backend.clients.spapi.auth import LWAAuth, SPAPIAuth, StsAuth
-from apps.backend.clients.spapi.base import SPAPIClient
-from apps.backend.clients.spapi.config import SPAPIConfig, load_spapi_config
+from backend.clients.http import HttpClient
+from backend.clients.spapi.auth import LWAAuth, SPAPIAuth, StsAuth
+from backend.clients.spapi.base import SPAPIClient
+from backend.clients.spapi.config import SPAPIConfig, load_spapi_config
 
 
 def build_spapi_client(

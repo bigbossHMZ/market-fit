@@ -86,6 +86,12 @@ class HttpClient:
                     continue
                 response.raise_for_status()
                 return response.json() if response.text else None
+            except httpx.HTTPStatusError as e:
+                logger.error(
+                    "HTTP %s %s failed: %s\nResponse body: %s",
+                    method.upper(), url, e, e.response.text,
+                )
+                raise
             except httpx.HTTPError as e:
                 logger.error("HTTP %s %s failed: %s", method.upper(), url, e)
                 raise
