@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from apps.backend.clients.spapi.config import (
+from backend.clients.spapi.config import (
     SPAPIConfig,
     StsConfig,
     LWAConfig,

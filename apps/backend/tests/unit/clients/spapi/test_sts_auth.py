@@ -2,9 +2,9 @@ import pytest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
-from apps.backend.clients.spapi.auth import StsAuth
-from apps.backend.clients.spapi.config import StsConfig
-from apps.backend.clients.spapi.errors import SPAPIAuthError
+from backend.clients.spapi.auth import StsAuth
+from backend.clients.spapi.config import StsConfig
+from backend.clients.spapi.errors import SPAPIAuthError
 
 
 def _make_config() -> StsConfig:
@@ -51,7 +51,7 @@ class TestAssumeRole:
         auth = StsAuth(config)
         credentials = _make_credentials()
 
-        with patch("apps.backend.clients.spapi.auth.boto3.client") as mock_boto3:
+        with patch("backend.clients.spapi.auth.boto3.client") as mock_boto3:
             mock_sts = MagicMock()
             mock_boto3.return_value = mock_sts
             mock_sts.assume_role.return_value = _make_assume_role_response(credentials)
@@ -69,7 +69,7 @@ class TestAssumeRole:
         auth = StsAuth(_make_config())
         credentials = _make_credentials()
 
-        with patch("apps.backend.clients.spapi.auth.boto3.client") as mock_boto3:
+        with patch("backend.clients.spapi.auth.boto3.client") as mock_boto3:
             mock_sts = MagicMock()
             mock_boto3.return_value = mock_sts
             mock_sts.assume_role.return_value = _make_assume_role_response(credentials)
@@ -85,7 +85,7 @@ class TestAssumeRole:
 
         fresh_credentials = _make_credentials(minutes_until_expiry=60)
 
-        with patch("apps.backend.clients.spapi.auth.boto3.client") as mock_boto3:
+        with patch("backend.clients.spapi.auth.boto3.client") as mock_boto3:
             mock_sts = MagicMock()
             mock_boto3.return_value = mock_sts
             mock_sts.assume_role.return_value = _make_assume_role_response(fresh_credentials)
@@ -98,7 +98,7 @@ class TestAssumeRole:
     async def test_raises_spapi_auth_error_on_boto3_failure(self):
         auth = StsAuth(_make_config())
 
-        with patch("apps.backend.clients.spapi.auth.boto3.client") as mock_boto3:
+        with patch("backend.clients.spapi.auth.boto3.client") as mock_boto3:
             mock_sts = MagicMock()
             mock_boto3.return_value = mock_sts
             mock_sts.assume_role.side_effect = Exception("AccessDenied")
@@ -113,7 +113,7 @@ class TestAssumeRole:
 
         fresh_credentials = _make_credentials(minutes_until_expiry=60)
 
-        with patch("apps.backend.clients.spapi.auth.boto3.client") as mock_boto3:
+        with patch("backend.clients.spapi.auth.boto3.client") as mock_boto3:
             mock_sts = MagicMock()
             mock_boto3.return_value = mock_sts
             mock_sts.assume_role.return_value = _make_assume_role_response(fresh_credentials)
@@ -128,12 +128,12 @@ class TestGetAwsAuth:
         auth = StsAuth(_make_config())
         credentials = _make_credentials()
 
-        with patch("apps.backend.clients.spapi.auth.boto3.client") as mock_boto3:
+        with patch("backend.clients.spapi.auth.boto3.client") as mock_boto3:
             mock_sts = MagicMock()
             mock_boto3.return_value = mock_sts
             mock_sts.assume_role.return_value = _make_assume_role_response(credentials)
 
-            with patch("apps.backend.clients.spapi.auth.BotocoreAWS4Auth") as mock_auth_cls:
+            with patch("backend.clients.spapi.auth.BotocoreAWS4Auth") as mock_auth_cls:
                 await auth.get_aws_auth()
                 mock_auth_cls.assert_called_once_with(
                     credentials["AccessKeyId"],
@@ -146,12 +146,12 @@ class TestGetAwsAuth:
         auth = StsAuth(_make_config())
         credentials = _make_credentials()
 
-        with patch("apps.backend.clients.spapi.auth.boto3.client") as mock_boto3:
+        with patch("backend.clients.spapi.auth.boto3.client") as mock_boto3:
             mock_sts = MagicMock()
             mock_boto3.return_value = mock_sts
             mock_sts.assume_role.return_value = _make_assume_role_response(credentials)
 
-            with patch("apps.backend.clients.spapi.auth.BotocoreAWS4Auth") as mock_auth_cls:
+            with patch("backend.clients.spapi.auth.BotocoreAWS4Auth") as mock_auth_cls:
                 await auth.get_aws_auth()
                 await auth.get_aws_auth()
                 mock_auth_cls.assert_called_once()
@@ -162,12 +162,12 @@ class TestGetAwsAuth:
 
         fresh_credentials = _make_credentials(minutes_until_expiry=60)
 
-        with patch("apps.backend.clients.spapi.auth.boto3.client") as mock_boto3:
+        with patch("backend.clients.spapi.auth.boto3.client") as mock_boto3:
             mock_sts = MagicMock()
             mock_boto3.return_value = mock_sts
             mock_sts.assume_role.return_value = _make_assume_role_response(fresh_credentials)
 
-            with patch("apps.backend.clients.spapi.auth.BotocoreAWS4Auth") as mock_auth_cls:
+            with patch("backend.clients.spapi.auth.BotocoreAWS4Auth") as mock_auth_cls:
                 await auth.get_aws_auth()
                 mock_auth_cls.assert_called_once_with(
                     fresh_credentials["AccessKeyId"],

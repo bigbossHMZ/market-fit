@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, call, patch
-from apps.backend.clients.spapi.base import SPAPIClient
-from apps.backend.clients.spapi.config import LWAConfig, SPAPIConfig, StsConfig
-from apps.backend.clients.spapi.factory import build_spapi_client, create_spapi_client
+from backend.clients.spapi.base import SPAPIClient
+from backend.clients.spapi.config import LWAConfig, SPAPIConfig, StsConfig
+from backend.clients.spapi.factory import build_spapi_client, create_spapi_client
 
 
 def _make_config() -> SPAPIConfig:
@@ -22,7 +22,7 @@ def _make_config() -> SPAPIConfig:
     )
 
 
-FACTORY_PATH = "apps.backend.clients.spapi.factory"
+FACTORY_PATH = "backend.clients.spapi.factory"
 
 
 class TestBuildSpapiClient:

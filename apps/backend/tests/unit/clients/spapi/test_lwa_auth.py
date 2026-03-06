@@ -4,9 +4,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import httpx
 
-from apps.backend.clients.spapi.auth import LWAAuth
-from apps.backend.clients.spapi.config import LWAConfig
-from apps.backend.clients.spapi.errors import SPAPIAuthError
+from backend.clients.spapi.auth import LWAAuth
+from backend.clients.spapi.config import LWAConfig
+from backend.clients.spapi.errors import SPAPIAuthError
 
 
 def _make_config() -> LWAConfig:

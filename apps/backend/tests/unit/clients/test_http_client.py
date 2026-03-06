@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import httpx
 
-from apps.backend.clients.http import HttpClient
+from backend.clients.http import HttpClient
 
 
 def _make_response(json_data=None, text=None, status_code=200):
@@ -18,12 +18,12 @@ def _make_response(json_data=None, text=None, status_code=200):
 
 class TestHttpClientInit:
     def test_creates_async_client_when_none_injected(self):
-        with patch("apps.backend.clients.http.httpx.AsyncClient") as mock_client_cls:
+        with patch("backend.clients.http.httpx.AsyncClient") as mock_client_cls:
             HttpClient(base_url="https://example.com", retries=5, backoff_factor=2.0)
             mock_client_cls.assert_called_once()
 
     def test_uses_injected_client_as_is(self):
-        with patch("apps.backend.clients.http.httpx.AsyncClient") as mock_client_cls:
+        with patch("backend.clients.http.httpx.AsyncClient") as mock_client_cls:
             injected_client = AsyncMock()
             HttpClient(base_url="https://example.com", client=injected_client)
             mock_client_cls.assert_not_called()
@@ -68,7 +68,7 @@ class TestHttpClientRequest:
         )
         self.mock_client.request.return_value = mock_response
 
-        with patch("apps.backend.clients.http.logger") as mock_logger:
+        with patch("backend.clients.http.logger") as mock_logger:
             with pytest.raises(httpx.HTTPStatusError):
                 await self.client.get("/items/B001")
             mock_logger.error.assert_called_once()

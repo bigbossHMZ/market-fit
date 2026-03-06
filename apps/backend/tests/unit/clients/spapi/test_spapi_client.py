@@ -3,8 +3,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import httpx
 
-from apps.backend.clients.spapi.base import SPAPIClient
-from apps.backend.clients.spapi.errors import (
+from backend.clients.spapi.base import SPAPIClient
+from backend.clients.spapi.errors import (
     SPAPIClientError,
     SPAPINetworkError,
     SPAPIServerError,
