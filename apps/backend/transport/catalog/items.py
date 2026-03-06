@@ -2,6 +2,7 @@ from pydantic import Field
 
 from backend.transport.base import SPAPITransport
 
+
 # summaries
 class BrowseClassificationTransport(SPAPITransport):
     display_name: str = Field(alias="displayName")
@@ -23,6 +24,7 @@ class CatalogItemSummaryTransport(SPAPITransport):
     browse_classification: BrowseClassificationTransport | None = Field(alias="browseClassification", default=None)
     website_display_group: str | None = Field(alias="websiteDisplayGroup", default=None)
     website_display_group_name: str | None = Field(alias="websiteDisplayGroupName", default=None)
+
 
 # salesRanks
 class ClassificationRankTransport(SPAPITransport):
